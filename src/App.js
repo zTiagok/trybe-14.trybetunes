@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import Sidebar from './Sidebar';
-import Content from './Content';
+import Header from './components/Header';
+import Content from './components/Content';
 
 class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
         <div>
-          <Sidebar />
+          <Header />
           <Content />
         </div>
       </BrowserRouter>

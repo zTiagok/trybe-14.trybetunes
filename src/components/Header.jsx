@@ -27,6 +27,7 @@ class Header extends React.Component {
           !
         </div>
         <nav className="navigation">
+          <Link to="/">Login</Link>
           <Link to="/search">Search</Link>
           <Link to="/album/:id">Albums</Link>
           <Link to="/favorites">Favorites</Link>
@@ -37,9 +38,7 @@ class Header extends React.Component {
 
     return (
       <header data-testid="header-component">
-        { username.length
-          ? headerItems
-          : <Loading />}
+        { headerItems }
       </header>
     );
   }

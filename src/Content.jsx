@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Home from './pages/Home';
+import Login from './pages/Login';
 import Album from './pages/Album';
 import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
@@ -14,7 +14,7 @@ class Content extends React.Component {
     return (
       <div className="content">
         <Switch>
-          <Route path="/" exact component={ Home } />
+          <Route path="/" exact component={ Login } />
           <Route path="/search" component={ Search } />
           <Route path="/album/:id" component={ Album } />
           <Route path="/favorites" component={ Favorites } />

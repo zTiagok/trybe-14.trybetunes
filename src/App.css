@@ -2,13 +2,14 @@
   padding: 0px;
 }
 
-nav {
+header {
   width: 150px;
   height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   float: left;
+  
 }
 
 main {

@@ -26,15 +26,15 @@ class Header extends React.Component {
           { username }
           !
         </p>
-        <Link to="/search" data-testid="link-to-search" className="link">Search</Link>
+        <Link to="/search" data-testid="link-to-search">Search</Link>
         {' '}
-        <Link to="/album/:id" className="link">Album</Link>
+        <Link to="/album/:id">Album</Link>
         {' '}
-        <Link to="/favorites" className="link">Favorites</Link>
+        <Link to="/favorites" data-testid="link-to-favorites">Favorites</Link>
         {' '}
-        <Link to="/profile" className="link">Profile</Link>
+        <Link to="/profile" data-testid="link-to-profile">Profile</Link>
         {' '}
-        <Link to="/profile/edit" className="link">Profile Editor</Link>
+        <Link to="/profile/edit">Profile Editor</Link>
       </>
     );
 

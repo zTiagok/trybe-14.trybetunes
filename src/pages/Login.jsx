@@ -43,35 +43,35 @@ class Login extends React.Component {
     const { username, btnDisabled, isLoading, redirect } = this.state;
 
     const loginInput = (
-      <div id="page-login">
-        <form id="login-form">
-          <input
-            type="text"
-            id="login-username"
-            minLength="3"
-            data-testid="login-name-input"
-            onChange={ this.usernameState }
-            value={ username }
-          />
-          <button
-            type="submit"
-            form="login-form"
-            data-testid="login-submit-button"
-            disabled={ btnDisabled }
-            onClick={ this.buttonClickEvent }
-          >
-            Entrar
-          </button>
-        </form>
+      <form id="login-form">
+        <input
+          type="text"
+          id="login-username"
+          minLength="3"
+          data-testid="login-name-input"
+          onChange={ this.usernameState }
+          value={ username }
+        />
+        <button
+          type="submit"
+          form="login-form"
+          data-testid="login-submit-button"
+          disabled={ btnDisabled }
+          onClick={ this.buttonClickEvent }
+        >
+          Entrar
+        </button>
         {redirect && <Redirect to="/search" />}
-      </div>
+      </form>
     );
     // -------------------------------------------------
 
     return (
-      (isLoading
-        ? <Loading />
-        : loginInput)
+      <div data-testid="page-login">
+        {isLoading
+          ? <Loading />
+          : loginInput}
+      </div>
     );
   }
 }

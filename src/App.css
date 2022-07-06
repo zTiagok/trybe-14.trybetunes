@@ -3,12 +3,12 @@
 }
 
 header {
+  position: relative;
+  height: 100%;
   width: 150px;
-  height: 150px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  float: left;
+  justify-content: start;
   
 }
 

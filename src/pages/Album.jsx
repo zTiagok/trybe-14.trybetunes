@@ -3,8 +3,8 @@ import React from 'react';
 class Album extends React.Component {
   render() {
     return (
-      <div className="content-album" data-testid="page-album">
-        Album
+      <div data-testid="page-album" id="content-album">
+        Album Page
       </div>
     );
   }

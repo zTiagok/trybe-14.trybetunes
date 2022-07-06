@@ -1,20 +1,20 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Login from '../pages/Login2';
+import Login from '../pages/Login';
 import Album from '../pages/Album';
 import Favorites from '../pages/Favorites';
+import NotFound from '../pages/NotFound';
 import Profile from '../pages/Profile';
 import ProfileEditor from '../pages/ProfileEditor';
 import Search from '../pages/Search';
-import NotFound from '../pages/NotFound';
 
 class Content extends React.Component {
   render() {
     return (
-      <div className="content">
+      <main id="content">
         <Switch>
-          <Route path="/" exact component={ Login } />
+          <Route exact path="/" component={ Login } />
           <Route path="/search" component={ Search } />
           <Route path="/album/:id" component={ Album } />
           <Route path="/favorites" component={ Favorites } />
@@ -22,7 +22,7 @@ class Content extends React.Component {
           <Route path="/profile" component={ Profile } />
           <Route path="*" component={ NotFound } />
         </Switch>
-      </div>
+      </main>
     );
   }
 }

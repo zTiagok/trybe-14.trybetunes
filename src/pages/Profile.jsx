@@ -3,8 +3,8 @@ import React from 'react';
 class Profile extends React.Component {
   render() {
     return (
-      <div className="content-profile" data-testid="page-profile">
-        Profile
+      <div data-testid="page-profile" id="content-profile">
+        Profile Page
       </div>
     );
   }

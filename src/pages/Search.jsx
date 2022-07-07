@@ -47,8 +47,6 @@ class Search extends React.Component {
       });
     }
 
-    console.log(apiFetch);
-
     this.setState({ btnDisabled: true, searchInfo: search, search: '', loading: false });
   }
 

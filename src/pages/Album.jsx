@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import Loading from './Loading';
 import getMusics from '../services/musicsAPI';
+import MusicCard from '../components/MusicCard';
 
 class Album extends React.Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class Album extends React.Component {
     this.state = {
       artist: '',
       album: '',
+      songs: [],
     };
   }
 
@@ -25,13 +26,12 @@ class Album extends React.Component {
     this.setState({
       artist: fetch[0].artistName,
       album: fetch[0].collectionName,
+      songs: [...fetch.slice(1)],
     });
-
-    console.log(fetch);
   };
 
   render() {
-    const { artist, album } = this.state;
+    const { artist, album, songs } = this.state;
 
     return (
       <>
@@ -44,6 +44,7 @@ class Album extends React.Component {
             { album }
           </h2>
         </div>
+        <MusicCard songs={ songs } />
       </>
     );
   }

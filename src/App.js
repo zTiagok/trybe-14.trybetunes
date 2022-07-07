@@ -23,7 +23,7 @@ class App extends React.Component {
 
               {/* OTHERS PAGES */}
               <Route path="/search" component={ Search } />
-              <Route path="/album/:id" component={ Album } />
+              <Route path="/album/:id" render={ (props) => <Album { ...props } /> } />
               <Route path="/favorites" component={ Favorites } />
               <Route path="/profile/edit" component={ ProfileEditor } />
               <Route path="/profile" component={ Profile } />

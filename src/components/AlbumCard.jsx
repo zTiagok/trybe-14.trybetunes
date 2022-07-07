@@ -6,7 +6,7 @@ class AlbumCard extends React.Component {
   render() {
     const { name, artist, url, collectionId } = this.props;
     return (
-      <div className="album-cards">
+      <div className="album-cards" key={ collectionId }>
         <p className="album-name">
           { name }
         </p>
@@ -19,7 +19,7 @@ class AlbumCard extends React.Component {
             className="album-link"
             data-testid={ `link-to-album-${collectionId}` }
           >
-            Ouvir
+            Acessar Álbum
           </p>
         </Link>
       </div>
@@ -28,10 +28,17 @@ class AlbumCard extends React.Component {
 }
 
 AlbumCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  artist: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  collectionId: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  artist: PropTypes.string,
+  url: PropTypes.string,
+  collectionId: PropTypes.string,
+};
+
+AlbumCard.defaultProps = {
+  name: '',
+  artist: '',
+  url: '',
+  collectionId: '',
 };
 
 export default AlbumCard;

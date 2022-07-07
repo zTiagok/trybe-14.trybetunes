@@ -1,21 +1,33 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import addSong from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
+  addToFavorites = (origin) => {
+    console.log(origin.target.checked);
+  }
+
   songMap = (song) => (
     <>
       <h4 className="track-name" key={ song.previewUrl }>
-        {' '}
         {song.trackName}
-        {' '}
       </h4>
       <audio data-testid="audio-component" src={ song.previewUrl } controls>
         <track kind="captions" />
         O seu navegador não suporta o elemento
-        {' '}
-        {' '}
         <code>audio</code>
       </audio>
+      <label
+        data-testid={ `checkbox-music-${song.trackId}` }
+        htmlFor={ `favorite-${song.trackId}` }
+      >
+        Favorita
+        <input
+          type="checkbox"
+          id={ `favorite-${song.trackId}` }
+          onClick={ this.addToFavorites }
+        />
+      </label>
     </>
   )
 

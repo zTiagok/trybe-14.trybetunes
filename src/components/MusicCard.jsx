@@ -1,13 +1,23 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import Loading from '../pages/Loading';
 import { addSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
-  addToFavorites = ({ target: { checked } }) => {
+  state = {
+    loading: false,
+    favorites: [],
+  }
+
+  addToFavorites = async ({ target: { checked, id } }) => {
     const { songs } = this.props;
+    const { favorites } = this.state;
 
     if (checked) {
-      addSong(songs);
+      const favArray = [...favorites, id];
+      this.setState({ favorites: favArray, loading: true });
+      await addSong(songs);
+      this.setState({ loading: false });
     }
   }
 
@@ -29,17 +39,23 @@ class MusicCard extends React.Component {
         <input
           type="checkbox"
           id={ `favorite-${song.trackId}` }
+          className="track-favorite"
           onClick={ this.addToFavorites }
+          // checked={ `favorite-${song.trackId}`  }
         />
       </label>
     </div>
   )
 
   render() {
+    const { loading } = this.state;
     const { songs } = this.props;
+
     return (
       <div className="tracks">
-        {songs.map((song) => this.songMap(song))}
+        {loading
+          ? <Loading />
+          : songs.map((song) => this.songMap(song))}
       </div>
     );
   }

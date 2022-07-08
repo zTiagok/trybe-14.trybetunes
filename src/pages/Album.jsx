@@ -22,12 +22,16 @@ class Album extends React.Component {
   fetchAlbum = async () => {
     const { match: { params: { id } } } = this.props;
 
-    const fetch = await getMusics(id);
-    this.setState({
-      artist: fetch[0].artistName,
-      album: fetch[0].collectionName,
-      songs: [...fetch.slice(1)],
-    });
+    try {
+      const fetch = await getMusics(id);
+      this.setState({
+        artist: fetch[0].artistName,
+        album: fetch[0].collectionName,
+        songs: [...fetch.slice(1)],
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {

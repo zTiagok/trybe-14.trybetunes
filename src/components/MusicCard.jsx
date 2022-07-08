@@ -1,15 +1,19 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import addSong from '../services/favoriteSongsAPI';
+import { addSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
-  addToFavorites = (origin) => {
-    console.log(origin.target.checked);
+  addToFavorites = ({ target: { checked } }) => {
+    const { songs } = this.props;
+
+    if (checked) {
+      addSong(songs);
+    }
   }
 
   songMap = (song) => (
-    <>
-      <h4 className="track-name" key={ song.previewUrl }>
+    <div key={ song.previewUrl } className="track-container">
+      <h4 className="track-name">
         {song.trackName}
       </h4>
       <audio data-testid="audio-component" src={ song.previewUrl } controls>
@@ -28,7 +32,7 @@ class MusicCard extends React.Component {
           onClick={ this.addToFavorites }
         />
       </label>
-    </>
+    </div>
   )
 
   render() {
@@ -42,7 +46,7 @@ class MusicCard extends React.Component {
 }
 
 MusicCard.propTypes = {
-  songs: propTypes.string,
+  songs: propTypes.arrayOf,
 };
 
 MusicCard.defaultProps = {

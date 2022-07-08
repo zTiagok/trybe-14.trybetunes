@@ -31,7 +31,7 @@ AlbumCard.propTypes = {
   name: PropTypes.string,
   artist: PropTypes.string,
   url: PropTypes.string,
-  collectionId: PropTypes.string,
+  collectionId: PropTypes.number,
 };
 
 AlbumCard.defaultProps = {

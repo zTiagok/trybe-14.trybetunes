@@ -9,8 +9,6 @@ import Profile from './pages/Profile';
 import ProfileEditor from './pages/ProfileEditor';
 import NotFound from './pages/NotFound';
 
-// import './App.css';
-
 class App extends React.Component {
   render() {
     return (

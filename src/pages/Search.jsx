@@ -1,96 +1,127 @@
 import React from 'react';
 import Header from '../components/Header';
+import AlbumCard from '../components/AlbumCard';
 import Loading from '../components/Loading';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
-import Card from '../components/Card';
 
 class Search extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+
     this.state = {
-      disabled: true,
-      artist: '',
-      renderLoading: false,
+      btnDisabled: true,
+      search: '',
+      searchInfo: '',
       albums: [],
-      albumsNotFound: false,
+      empty: '',
+      loading: false,
     };
   }
 
-  handleChange = ({ target }) => {
-    const { value } = target;
-    if (value.length > 1) {
-      return this.setState({
-        disabled: false,
-        artist: value,
+  searchState = (origin) => {
+    const minLength = 2;
+    this.setState({ search: origin.target.value });
+
+    if (origin.target.value.length >= minLength) {
+      this.setState({ btnDisabled: false });
+    } else {
+      this.setState({ btnDisabled: true });
+    }
+  };
+
+  buttonEvent = async (origin) => {
+    origin.preventDefault();
+    this.setState({ loading: true });
+    const { search } = this.state;
+    const apiFetch = await searchAlbumsAPI(search);
+
+    if (apiFetch.length >= 1) {
+      this.setState({
+        albums: [...apiFetch],
+        empty: false,
+      });
+    } else {
+      this.setState({
+        albums: [],
+        empty: true,
       });
     }
-    return this.setState({ disabled: true });
+
+    this.setState({ btnDisabled: true, searchInfo: search, search: '', loading: false });
   }
 
-  handleClick = async () => {
-    try {
-      const { artist } = this.state;
-      this.setState({ renderLoading: true });
-      const obj = await searchAlbumsAPI(artist);
-      if (obj.length === 0) {
-        this.setState({
-          albumsNotFound: true,
-          albums: [],
-          disabled: true,
-          renderLoading: false,
-        });
-      } else {
-        this.setState({
-          renderLoading: false,
-          disabled: true,
-          albums: [...obj],
-          albumsNotFound: false,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  albumElement = (album) => {
+    <p key={ album }>
+      {' '}
+      {album}
+      {' '}
+    </p>;
   }
+
+  albumItem = (album) => (
+    <AlbumCard
+      artist={ album.artistName }
+      name={ album.collectionName }
+      url={ album.artworkUrl100 }
+      collectionId={ album.collectionId }
+      key={ album.collectionName }
+    />
+  );
 
   render() {
-    const { disabled, artist, renderLoading, albumsNotFound, albums } = this.state;
-    const albunsByArtist = (
-      <div>
-        <p>
-          {`Resultado de álbuns de: 
-          ${artist}`}
-        </p>
-        {albums.map((album) => <Card key={ album.collectionId } album={ album } />)}
-      </div>);
+    const { btnDisabled, search, albums, empty, searchInfo, loading } = this.state;
+
+    const albumsArray = (
+      <>
+        <h3 id="search-message">
+          Resultado de álbuns de:
+          {' '}
+          {searchInfo}
+        </h3>
+        {albums.map((album) => this.albumItem(album))}
+      </>
+    );
+
+    const albumsNotFound = (
+      <h3 id="search-not-found"> Nenhum álbum foi encontrado</h3>
+    );
+
     return (
-      <div data-testid="page-search">
+      <>
         <Header />
-        {
-          renderLoading
+        <div data-testid="page-search" id="content-search">
+          {loading
             ? <Loading />
             : (
-              <form>
-                <input
-                  type="text"
-                  name="artist"
-                  data-testid="search-artist-input"
-                  onChange={ this.handleChange }
-                  placeholder="Nome do Artista"
-                />
-                <button
-                  type="submit"
-                  data-testid="search-artist-button"
-                  disabled={ disabled }
-                  onClick={ this.handleClick }
-                >
-                  Pesquisar
-                </button>
-              </form>
-            )
-        }
-        {albums.length > 0 && albunsByArtist}
-        {albumsNotFound && <p>Nenhum álbum foi encontrado</p>}
-      </div>
+              <>
+                <form id="search-form">
+                  <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Artist Name"
+                    data-testid="search-artist-input"
+                    minLength="2"
+                    onChange={ this.searchState }
+                    value={ search }
+                  />
+                  <button
+                    type="submit"
+                    form="search-form"
+                    data-testid="search-artist-button"
+                    disabled={ btnDisabled }
+                    onClick={ this.buttonEvent }
+                  >
+                    Search
+                  </button>
+                </form>
+                <div id="search-result">
+                  { albums.length >= 1 && albumsArray }
+                  { empty && albumsNotFound }
+                </div>
+              </>
+            )}
+        </div>
+      </>
     );
   }
 }

@@ -1,48 +1,44 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
-import Loading from '../pages/Loading';
+import Loading from './Loading';
 
-class Header extends React.Component {
+class Header extends Component {
   constructor() {
     super();
-
     this.state = {
-      username: '',
+      user: '',
     };
   }
 
   componentDidMount() {
-    getUser().then((value) => this.setState({ username: value.name }));
+    getUser().then((request) => this.setState({ user: request.name }));
   }
 
   render() {
-    const { username } = this.state;
-    const header = (
-      <>
-        <p data-testid="header-user-name" id="user-welcome">
-          Welcome
-          {' '}
-          { username }
-          !
-        </p>
-        <Link to="/search" data-testid="link-to-search">Search</Link>
-        {' '}
-        <Link to="/album/:id">Album</Link>
-        {' '}
-        <Link to="/favorites" data-testid="link-to-favorites">Favorites</Link>
-        {' '}
-        <Link to="/profile" data-testid="link-to-profile">Profile</Link>
-        {' '}
-        <Link to="/profile/edit">Profile Editor</Link>
-      </>
-    );
-
+    const { user } = this.state;
     return (
-      <header data-testid="header-component" id="links">
-        {username.length > 0
-          ? header
-          : <Loading />}
+      <header data-testid="header-component">
+        <div>
+          {
+            (
+              user.length
+                ? (
+                  <div>
+                    <p>Welcome, </p>
+                    <p data-testid="header-user-name">{user}</p>
+                  </div>
+                )
+                : <Loading />
+            )
+          }
+        </div>
+        <div>
+          <Link to="/search" data-testid="link-to-search">Pesquisa</Link>
+          <Link to="/favorites" data-testid="link-to-favorites">Favoritos</Link>
+          <Link to="/profile" data-testid="link-to-profile">Perfil</Link>
+        </div>
+
       </header>
     );
   }

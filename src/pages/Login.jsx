@@ -1,76 +1,64 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
-import Loading from './Loading';
+import React, { Component } from 'react';
+import { Redirect } from 'react-router';
 import { createUser } from '../services/userAPI';
+import Loading from '../components/Loading';
 
-class Login extends React.Component {
-  constructor() {
-    super();
-
+class Login extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      username: '',
-      btnDisabled: true,
-      isLoading: false,
-      redirect: false,
+      name: '',
+      disabled: true,
+      renderLoading: false,
+      renderSearch: false,
+
     };
   }
 
-  usernameState = (origin) => {
-    const maxLength = 3;
-
-    this.setState({ username: origin.target.value });
-
-    if (origin.target.value.length >= maxLength) {
-      this.setState({ btnDisabled: false });
-    } else {
-      this.setState({ btnDisabled: true });
+  handleChange = ({ target }) => {
+    const { value } = target;
+    if (value.length > 2) {
+      return this.setState({ name: value, disabled: false });
     }
+    return this.setState({ name: '', disabled: true });
   }
 
-  buttonClickEvent = (origin) => {
-    this.setState({ isLoading: true });
-    const { username } = this.state;
-    origin.preventDefault();
-
-    const promise = createUser({ name: username });
-    promise.then(() => { this.setState({ isLoading: false, redirect: true }); });
-
-    this.setState({ username: '', btnDisabled: true });
-  };
+  handleLoading = (e) => {
+    const { name } = this.state;
+    e.preventDefault();
+    this.setState({ renderLoading: true });
+    const promise = createUser({ name });
+    promise.then(() => this.setState({ renderLoading: false, renderSearch: true }));
+  }
 
   render() {
-    // VARIÁVEIS ----------------------------------------
-    const { username, btnDisabled, isLoading, redirect } = this.state;
-
-    const loginInput = (
-      <form id="login-form">
-        <input
-          type="text"
-          id="login-username"
-          minLength="3"
-          data-testid="login-name-input"
-          onChange={ this.usernameState }
-          value={ username }
-        />
-        <button
-          type="submit"
-          form="login-form"
-          data-testid="login-submit-button"
-          disabled={ btnDisabled }
-          onClick={ this.buttonClickEvent }
-        >
-          Entrar
-        </button>
-        {redirect && <Redirect to="/search" />}
-      </form>
-    );
-    // -------------------------------------------------
-
+    const { disabled, renderLoading, renderSearch } = this.state;
     return (
       <div data-testid="page-login">
-        {isLoading
-          ? <Loading />
-          : loginInput}
+        {
+          (renderLoading
+            ? <Loading />
+            : (
+              <form>
+                <input
+                  data-testid="login-name-input"
+                  type="text"
+                  placeholder="Nome"
+                  onChange={ this.handleChange }
+                />
+                <button
+                  data-testid="login-submit-button"
+                  type="submit"
+                  onClick={ this.handleLoading }
+                  disabled={ disabled }
+                >
+                  Entrar
+                </button>
+              </form>
+            )
+          )
+        }
+        {renderSearch && <Redirect to="/search" />}
       </div>
     );
   }

@@ -1,76 +1,96 @@
-import React from 'react';
-import propTypes from 'prop-types';
-import Loading from '../pages/Loading';
-import { addSong } from '../services/favoriteSongsAPI';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { addSong, removeSong } from '../services/favoriteSongsAPI';
+import Loading from './Loading';
 
-class MusicCard extends React.Component {
-  state = {
-    loading: false,
-    favorites: [],
+class MusicCard extends Component {
+  constructor(props) {
+    super(props);
+    const { favorites, trackId } = props;
+    this.state = {
+      isChecked: favorites.some((favorite) => favorite.trackId === trackId),
+      loading: false,
+    };
   }
 
-  addToFavorites = async ({ target: { checked, id } }) => {
-    const { songs } = this.props;
-    const { favorites } = this.state;
-
-    if (checked) {
-      const favArray = [...favorites, id];
-      this.setState({ favorites: favArray, loading: true });
-      await addSong(songs);
-      this.setState({ loading: false });
-      console.log(favArray);
-    }
+  componentDidMount() {
+    const { favorites } = this.props;
+    console.log(favorites);
   }
 
-  songMap = (song) => {
-    const { favorites } = this.state;
-    return (
-      <div key={ song.previewUrl } className="track-container">
-        <h4 className="track-name">
-          {song.trackName}
-        </h4>
-        <audio data-testid="audio-component" src={ song.previewUrl } controls>
-          <track kind="captions" />
-          O seu navegador não suporta o elemento
-          <code>audio</code>
-        </audio>
-        <label
-          data-testid={ `checkbox-music-${song.trackId}` }
-          htmlFor={ `favorite-${song.trackId}` }
-        >
-          Favorita
-          <input
-            type="checkbox"
-            id={ `favorite-${song.trackId}` }
-            className="track-favorite"
-            onClick={ this.addToFavorites }
-            checked={ favorites.includes(`favorite-${song.trackId}`) }
-          />
-        </label>
-      </div>
-    );
+  handleFavorite = ({ target }) => {
+    const { checked } = target;
+    const { songObj, isFavorite, handleRemoveFavorite } = this.props;
+    this.setState({ isChecked: checked, loading: true }, () => {
+      if (checked) {
+        addSong(songObj)
+          .then(() => this.setState({ loading: false }));
+      } else {
+        if (isFavorite === false) {
+          handleRemoveFavorite();
+          removeSong(songObj);
+        }
+        removeSong(songObj)
+          .then(() => this.setState({ loading: false }));
+      }
+    });
   }
 
   render() {
-    const { loading } = this.state;
-    const { songs } = this.props;
-
+    const { isChecked, loading } = this.state;
+    const { trackName,
+      previewUrl,
+      trackId,
+      index } = this.props;
     return (
-      <div className="tracks">
-        {loading
-          ? <Loading />
-          : songs.map((song) => this.songMap(song))}
+      <div>
+        <p>{trackName}</p>
+        <audio data-testid="audio-component" src={ previewUrl } controls>
+          <track kind="captions" />
+          O seu navegador não suporta o elemento
+          {' '}
+          <code>audio</code>
+          .
+        </audio>
+        <div>
+          <label htmlFor={ index }>
+            Favorita
+            <input
+              type="checkbox"
+              data-testid={ `checkbox-music-${trackId}` }
+              id={ index }
+              onChange={ this.handleFavorite }
+              checked={ isChecked }
+              name={ trackName }
+            />
+          </label>
+        </div>
+        {loading && <Loading />}
       </div>
     );
   }
 }
 
 MusicCard.propTypes = {
-  songs: propTypes.arrayOf,
+  trackName: PropTypes.string,
+  previewUrl: PropTypes.string,
+  trackId: PropTypes.number,
+  index: PropTypes.number,
+  songObj: PropTypes.shape({}),
+  favorites: PropTypes.objectOf(PropTypes.string),
+  isFavorite: PropTypes.bool,
+  handleRemoveFavorite: PropTypes.func,
 };
 
 MusicCard.defaultProps = {
-  songs: [],
+  trackName: '',
+  previewUrl: '',
+  trackId: 0,
+  index: 0,
+  songObj: {},
+  favorites: [],
+  isFavorite: false,
+  handleRemoveFavorite: () => { },
 };
 
 export default MusicCard;

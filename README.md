@@ -28,9 +28,9 @@
     ℹ️ Information ℹ️
   </h3>
   <br>
-  <span> - </span> 
+  <span> Consuming an iTunes API, search for songs, access the artist's albums, add to favorites, and listen to tracks whenever you want. </span> 
   <br><br>
-  <span> - </span>
+  <span> Using routes to communicate the various components, a totally dynamic and asynchronous application was created to suit everyone's musical tastes. </span>
   <br>
   <hr>
   <h3>
